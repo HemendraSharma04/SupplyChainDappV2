@@ -1,4 +1,6 @@
 import { faker } from '@faker-js/faker';
+import React, { useState, useEffect } from 'react';
+import { ethers } from 'ethers';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
@@ -18,10 +20,65 @@ import {
   AppConversionRates,
 } from '../sections/@dashboard/app';
 
+import SupplyChain from '../artifacts/contracts/Supplychain.sol/Supplychain.json';
+
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
   const theme = useTheme();
+   const [unitsList, setUnit] = useState();
+   const [gtin,setGtin] = useState(1234);
+   const [sn,setSn]=useState(0);
+   const ContractAddress = '0xb8f91d0C5cc906855f56E91232c655bE06c2dD4a';
+
+   async function requestAccount() {
+     await window.ethereum.request({ method: 'eth_requestAccounts' });
+   }
+
+   useEffect(() => {
+     // Update the document title using the browser API
+     if (!unitsList) {
+       historyAll();
+     }
+     console.log(unitsList);
+   }, []);
+
+   async function historyAll() {
+     if (typeof window.ethereum !== 'undefined') {
+       requestAccount();
+       const provider = new ethers.providers.Web3Provider(window.ethereum);
+       const signer = provider.getSigner();
+       console.log(await signer.getAddress());
+
+       const contract = new ethers.Contract(ContractAddress, SupplyChain.abi, provider);
+       try {
+         const Pdata = await contract.historyAll();
+         console.log('data: ', Pdata);
+         setUnit(Pdata);
+       } catch (err) {
+         console.log('Error: ', err);
+       }
+     }
+
+   }
+
+   async function history() {
+     if (typeof window.ethereum !== 'undefined') {
+       requestAccount();
+       const provider = new ethers.providers.Web3Provider(window.ethereum);
+       const signer = provider.getSigner();
+       console.log(await signer.getAddress());
+
+       const contract = new ethers.Contract(ContractAddress, SupplyChain.abi, provider);
+       try {
+         const Pdata = await contract.historyAll();
+         console.log('data: ', Pdata);
+         setUnit(Pdata);
+       } catch (err) {
+         console.log('Error: ', err);
+       }
+     }
+    }
 
   return (
     <Page title="Dashboard">
@@ -136,7 +193,7 @@ export default function DashboardApp() {
               chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
             />
           </Grid> */}
-
+{/* 
           <Grid item xs={12} md={6} lg={8}>
             <AppNewsUpdate
               title="News Update"
@@ -166,7 +223,7 @@ export default function DashboardApp() {
                 time: faker.date.past(),
               }))}
             />
-          </Grid>
+          </Grid> */}
 
           {/* <Grid item xs={12} md={6} lg={4}>
             <AppTrafficBySite
