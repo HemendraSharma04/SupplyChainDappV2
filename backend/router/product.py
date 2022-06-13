@@ -26,7 +26,7 @@ def index(id:int):
 
 @router.post('/')
 def index(unit: Unit):
-    return addUnitInfo(unit.GLN, unit.GTIN, unit.GSIN,unit.SSCC,unit.name,unit.data,unit.w_id)
+    return addUnitInfo(unit.GLN, unit.GTIN, unit.GSIN,unit.SSCC,unit.SN,unit.name,unit.data,unit.w_id)
 
 @router.post('/historyall')
 def index():
